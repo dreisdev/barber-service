@@ -20,5 +20,9 @@ export class ExpertsService {
         })
     }
 
+    async findAllExperts() {
+        return await this.prisma.expert.findMany()
+    }
+
 
 }
