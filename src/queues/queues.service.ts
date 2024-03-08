@@ -51,7 +51,14 @@ export class QueuesService {
 
         })
 
-        return queueToday
+        return queueToday.map(queue => {
+            return {
+                ...queue,
+                queueCustomers: queue.queueCustomers.filter(
+                    customer => customer.isAwaiting
+                )
+            }
+        })
     }
 
 }
