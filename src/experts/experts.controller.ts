@@ -8,17 +8,20 @@ import {
   Param,
   Patch,
   Post,
-  Res
+  Res,
+  UseGuards
 } from '@nestjs/common';
 import { ExpertsService } from './experts.service';
 import CreateExpertDto from './dtos/create-experts';
 import { Response } from 'express';
 import UpdateExpertDto from './dtos/update-experts';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-guards';
 
 @Controller('experts')
 export class ExpertsController {
   constructor(private readonly expertsService: ExpertsService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() data: CreateExpertDto, @Res() res: Response) {
     const expertExists = await this.expertsService.findExpertByEmail(data.email)
@@ -48,7 +51,7 @@ export class ExpertsController {
     return res.status(HttpStatus.OK).json(expert)
   }
 
-
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updateExpert(@Res() res: Response, @Param('id') id: string, @Body() data: UpdateExpertDto) {
     const expert = await this.expertsService.findExpert(id)
